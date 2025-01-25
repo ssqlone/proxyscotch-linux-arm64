@@ -214,8 +214,6 @@ if [ "$BUILD_TYPE" = "server" ]; then
     fi
     
     if [ "$PLATFORM" = "linux" ]; then
-      GOOS="$PLATFORM" GOARCH="amd64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
-      mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-amd64-v${VERSION_NAME}"
       
       GOOS="$PLATFORM" GOARCH="arm64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
       mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-arm64-v${VERSION_NAME}"
@@ -317,10 +315,7 @@ elif [ "$PLATFORM" = "windows" ]; then
   # zip -r "Proxyscotch-Windows-v${VERSION_NAME}.zip" "Proxyscotch-Windows-v${VERSION_NAME}.exe"
   # cd "$WORKING_DIR" || exit 1
 elif [ "$PLATFORM" = "linux" ]; then
-  # Build for Linux amd64
-  CGO_ENABLED=1 GOOS="linux" GOARCH="amd64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/Proxyscotch-Desktop-Linux-amd64-v${VERSION_NAME}"
   # Build for Linux arm64
-  if command -v aarch64-linux-gnu-gcc >/dev/null 2>&1; then
     CGO_ENABLED=1 GOOS="linux" GOARCH="arm64" CC=aarch64-linux-gnu-gcc go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/Proxyscotch-Desktop-Linux-arm64-v${VERSION_NAME}"
   else
     echo "Error: aarch64-linux-gnu-gcc not found. Install it to enable arm64 builds."
