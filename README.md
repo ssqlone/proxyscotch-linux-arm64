@@ -1,3 +1,6 @@
+# Only for Linux ARM64
+
+
 <div align="center">
   <a href="https://hoppscotch.io"><img src="https://hoppscotch.io/icon.png" alt="Hoppscotch" height="128"></a>
   <br>
