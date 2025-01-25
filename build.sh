@@ -197,38 +197,29 @@ mkdir "out/$PLATFORM-$BUILD_TYPE"
 OUTPUT_DIR="out/$PLATFORM-$BUILD_TYPE"
 
 
-# Handle special build: server
 if [ "$BUILD_TYPE" = "server" ]; then
   echo "Executing go build..."
-
 	if [ "$PLATFORM" = "windows" ]; then
 		GOOS="$PLATFORM" GOARCH="amd64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server.exe" server/server.go
 	  mv "$OUTPUT_DIR/proxyscotch-server.exe" "$OUTPUT_DIR/proxyscotch-server-windows-amd64-v${VERSION_NAME}.exe"
-
 	  GOOS="$PLATFORM" GOARCH="arm64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server.exe" server/server.go
     mv "$OUTPUT_DIR/proxyscotch-server.exe" "$OUTPUT_DIR/proxyscotch-server-windows-arm64-v${VERSION_NAME}.exe"
-
-    # echo "Compressing release binary..."
-    # WORKING_DIR=$(pwd)
-    # cd "$OUTPUT_DIR" || exit 1
-	  # zip -r "proxyscotch-server-windows-v${VERSION_NAME}.zip" "proxyscotch-server-windows-v${VERSION_NAME}.exe"
-	  # cd "$WORKING_DIR" || exit 1
 	else
 		GOOS="$PLATFORM" GOARCH="amd64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
 	  mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-amd64-v${VERSION_NAME}"
-
-    # Only run arm64 build for Darwin non-windows.
-    # TODO: Linux arm64?
+    
     if [ "$PLATFORM" = "darwin" ]; then
       GOOS="$PLATFORM" GOARCH="arm64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
       mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-arm64-v${VERSION_NAME}"
     fi
-
-	  # echo "Compressing release binary..."
-	  # WORKING_DIR=$(pwd)
-    # cd "$OUTPUT_DIR" || exit 1
-	  # zip -r "proxyscotch-server-${PLATFORM}-v${VERSION_NAME}.zip" "proxyscotch-server-${PLATFORM}-v${VERSION_NAME}"
-	  # cd "$WORKING_DIR" || exit 1
+    
+    if [ "$PLATFORM" = "linux" ]; then
+      GOOS="$PLATFORM" GOARCH="amd64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
+      mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-amd64-v${VERSION_NAME}"
+      
+      GOOS="$PLATFORM" GOARCH="arm64" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "$OUTPUT_DIR/proxyscotch-server" server/server.go
+      mv "$OUTPUT_DIR/proxyscotch-server" "$OUTPUT_DIR/proxyscotch-server-${PLATFORM}-arm64-v${VERSION_NAME}"
+    fi
 	fi
 	exit
 fi
