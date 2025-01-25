@@ -1,0 +1,11 @@
+services:
+  proxyscotch:
+    image: ssqlone/proxyscotch:latest
+    container_name: proxyscotch
+    networks:
+      - hoppscotch_default
+    expose:
+      - 9159
+networks:
+  hoppscotch_default:
+    external: true
