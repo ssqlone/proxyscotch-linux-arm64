@@ -1,6 +1,6 @@
 services:
   proxyscotch:
-    image: ssqlone/proxyscotch:latest
+    image: ssqlone/proxyscotch-arm:latest
     container_name: proxyscotch
     networks:
       - hoppscotch_default
