@@ -4,6 +4,8 @@ LABEL maintainer="me+proxyscotch@samjakob.com"
 
 WORKDIR /etc/proxyscotch
 
+RUN apk add --no-cache bash curl busybox-extras bind-tools
+
 COPY . /etc/proxyscotch
 RUN ./build.sh linux server
 
